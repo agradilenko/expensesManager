@@ -5,6 +5,11 @@ import dotenv from 'dotenv';
 import { Application } from 'express';
 import mongoose from 'mongoose';
 import { ConnectionOptions } from 'tls';
+import passport from 'passport';
+import { passportStrategy } from './utils/passport';
+
+import expenseRoutes from './routes/expense';
+import userRoutes from './routes/user';
 
 const app: Application = express();
 
@@ -23,6 +28,13 @@ mongoose
 
 app.use(cors());
 app.use(express.json());
+
+app.use(passport.initialize());
+
+passportStrategy(passport);
+
+app.use('/api/expense', expenseRoutes);
+app.use('/api/users', userRoutes);
 
 const PORT: string | number = process.env.PORT || 5000;
 
